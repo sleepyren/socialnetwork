@@ -32,6 +32,11 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen name = "profilepage" options= {{
+        title: 'ProfilePageTest',
+        tabBarIcon : ({color, focused}) => (
+           <TabBarIcon name = {focused ? 'book' : 'book-outline'} color = {color}/>
+            ),}} />
     </Tabs>
   );
 }
