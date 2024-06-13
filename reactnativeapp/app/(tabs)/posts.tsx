@@ -10,8 +10,8 @@ export default function TestScreen() {
 const textP : TextPostProps = {username: 'ren', text: 'This is \
 the body of the message! TEST TEST !',
     profileImageLink: "https://upload.wikimedia.org/wikipedia/en/a/a9/MarioNSMBUDeluxe.png",
-    date: new Date().toLocaleString(), likes: 5
-}
+    date: JSON.stringify(new Date()), likes: 5
+} //.toLocaleString()
 return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -52,3 +52,4 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
+
