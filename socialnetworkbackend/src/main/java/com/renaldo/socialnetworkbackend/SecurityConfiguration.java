@@ -1,5 +1,6 @@
 package com.renaldo.socialnetworkbackend;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 import javax.sql.DataSource;
 
@@ -25,16 +27,35 @@ import static org.springframework.security.config.Customizer.withDefaults;
 //reference : https://www.baeldung.com/spring-security-login
 //HTTP SECURITY CLASS: https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/builders/HttpSecurity.html
 public class SecurityConfiguration {
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
+    @Bean
+    protected HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository() {
+        return new HttpSessionCsrfTokenRepository();
+    }
 
+    //Final Methods based on this reference:
+    //https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 //lambda expression inside authorize http requests
                 .authorizeHttpRequests((HttpRequests)->
                         HttpRequests
-                                .requestMatchers("/**").hasRole("USER")
+                                .requestMatchers("/login", "/csrf").permitAll()//,"/h2-console/**").permitAll()
+                                .anyRequest().authenticated()
+                                //.hasRole("USER")
                 )
+                .csrf((csrf) -> csrf
+                        .csrfTokenRepository(httpSessionCsrfTokenRepository())
+                        //.ignoringRequestMatchers("/h2-console/**")
+                )
+               // .headers(headers -> headers
+                 //       .frameOptions().sameOrigin())  // Allow frames from the same origin
+
                 .formLogin(withDefaults());
         return http.build();
     }
@@ -45,6 +66,7 @@ public class SecurityConfiguration {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
                 .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
+                .setName("postsdb")
                 .build();
     }
 
@@ -57,18 +79,22 @@ public class SecurityConfiguration {
     //references: https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/jdbc.html
     //https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/User.html
 
+
     @Bean
-    public UserDetailsManager userDatabase(DataSource dataSource)
+    public UserDetailsManager userDatabase(DataSource dataSource, PasswordEncoder encoder)
     {
 
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         UserDetails user = User.withUsername(env_username)
                 .password(encoder.encode(env_password))
                 .roles("USER")
                 .build();
 
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        users.createUser(user);
+        //normally this conditional would be important but the table
+        //is set to create drop so I know it does not exist for sure
+        //if (!users.userExists(env_username)) {
+            users.createUser(user);
+        //}
         return users;
     }
 

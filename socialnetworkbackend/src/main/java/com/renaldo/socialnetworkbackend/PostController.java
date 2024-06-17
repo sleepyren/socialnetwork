@@ -11,8 +11,16 @@ import java.util.List;
 @RestController
 public class PostController {
 
+    private final PostRepo repository;
+
+    /*
+    Why do I have this constructor? Because field injection like I learned it
+    is not recommended anymore. This makes sure that object can
+    never be null since it instantiated with a real obj*/
     @Autowired
-    PostRepo repository;
+    public PostController(PostRepo repository) {
+        this.repository = repository;
+    }
 
 
     @GetMapping(value = "/printall")
