@@ -32,10 +32,11 @@ This project is a social media application built using React Native and Expo for
 ## Frontend
 
 1.    Clone the repository:
-    ```
-    git clone https://github.com/sleepyren/socialnetwork
-    cd reactnativeapp
-    ```
+    
+```
+git clone https://github.com/sleepyren/socialnetwork
+cd reactnativeapp
+```
     
 2. Install dependencies
     ```
@@ -53,7 +54,7 @@ npm run start
 
 ## Backend
 
-1. CD
+1. Change Directory
 ```
 cd socialnetworkbackend
 ```
@@ -66,6 +67,7 @@ ROOT_PASSWORD =pass
 ```
 
 3. Run project in terminal (or IDE if you prefer)
+
 ```
 mvn spring-boot:run
 ```
@@ -73,10 +75,11 @@ mvn spring-boot:run
 ## Usage
 
 ### Run the backend:
-    Ensure the Spring Boot backend is running.
+Ensure the Spring Boot backend is running.
 
 ###    Run the frontend:
-        Start the Expo development server and use the Expo Go app to scan the QR code or run the project on an emulator.
+Start the Expo development server and use the Expo Go app to scan the QR
+code or run the project on an emulator.
 
 ### Access the application:
         Register and login using the authentication endpoints.
