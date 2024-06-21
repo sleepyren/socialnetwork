@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import com.renaldo.socialnetworkbackend.PostRepo;
 import com.renaldo.socialnetworkbackend.models.Post;
 
+import javax.print.attribute.standard.Media;
+import java.awt.*;
 import java.util.List;
 
 @RestController
@@ -32,6 +34,7 @@ public class PostController {
     @PostMapping(value = "/save", consumes = "application/json")
     public Post save(@RequestBody Post post)
     {return repository.save(post);}
+    
 
     @GetMapping(value = "/postbyid/{id}")
     public Post findById(@PathVariable Long id)

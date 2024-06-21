@@ -3,9 +3,12 @@ package com.renaldo.socialnetworkbackend;
 import com.renaldo.socialnetworkbackend.models.Image;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 
@@ -41,5 +44,28 @@ public class ImageController {
         }
         response.setStatus(HttpServletResponse.SC_OK);
         return image.getId();
+    }
+
+    @GetMapping(value = "/img/{id}" , produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getImage(@PathVariable long id, HttpServletResponse response) {
+        Image i = repository.findImageById(id);
+        if (i == null) {
+            response.setStatus(404);
+            return null;
+        }
+        response.setStatus(HttpServletResponse.SC_OK);
+        return i.getData();
+
+    }
+
+    @PostMapping("/deleteimg")
+    public void deleteImage(long id, HttpServletResponse response) {
+        Image i = repository.findImageById(id);
+        if (i == null) {
+            response.setStatus(404);
+            return;
+        }
+        repository.delete(i);
+        response.setStatus(204);
     }
 }
