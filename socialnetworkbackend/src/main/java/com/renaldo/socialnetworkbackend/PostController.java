@@ -12,7 +12,6 @@ import java.util.List;
 public class PostController {
 
     private final PostRepo repository;
-
     /*
     Why do I have this constructor? Because field injection like I learned it
     is not recommended anymore. This makes sure that object can
@@ -32,9 +31,7 @@ public class PostController {
     }
     @PostMapping(value = "/save", consumes = "application/json")
     public Post save(@RequestBody Post post)
-    {
-        return repository.save(post);
-    }
+    {return repository.save(post);}
 
     @GetMapping(value = "/postbyid/{id}")
     public Post findById(@PathVariable Long id)
@@ -43,6 +40,5 @@ public class PostController {
     @GetMapping(value="/postsbyusername/{username}")
     public List<Post> findByUsername(@PathVariable String username)
     {return repository.findByUsername(username);}
-
 
 }

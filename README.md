@@ -1,6 +1,6 @@
 # Social Network: A React Native Expo Social Media App with Spring Boot Backend
 
-This project is a social media application built using React Native and Expo for the front end and a Spring Boot backend with CSRF protection and authentication. The backend handles all posts and image uploads.
+This project is a social media application built using React Native and Expo for the front end and a Spring Security backend with CSRF protection and authentication. The backend handles all posts and image uploads.
 
 
 ## Features
@@ -16,7 +16,7 @@ This project is a social media application built using React Native and Expo for
         CSRF protection
         Stores posts and images
 
-       # Requirements
+# Requirements
 ## Frontend
 
     Node.js

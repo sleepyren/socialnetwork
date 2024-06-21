@@ -59,17 +59,31 @@ export function CreatePost(data: {username : string, profileImageLink: string})
                     postObj.bodyImage= (response as any).headers["imgurl"];
                 else //if failed reset state and cache
                 {
+                    //if this was a photo not selected from the file system
+                    //i.e. i took this photo with the camera wrapper
                     if (!(uri?.chosenPhoto as boolean)) 
                         await FileSystem.deleteAsync(uri?.uri as string)
+
                     setText(""); setUri(null);
                     return;
                 }    
             }
 
+
+            response = await fetch(backendURL + "/save/", {
+                method: "POST",
+                body: JSON.stringify(postObj),
+            })
             //finally submit Post Obj altogether 
             //and also create an endpoint to delete 
             //if the image was uploaded but the post upload failed
 
+            
+            if (!response.ok &&!(uri?.chosenPhoto as boolean) )
+            {
+                //fetch(backendURL + /deleteimg/, {method: "POST"})
+
+            }
 
 
 
