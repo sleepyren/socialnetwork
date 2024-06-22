@@ -45,16 +45,17 @@ public class SecurityConfiguration {
                 //lambda expression inside authorize http requests
                 .authorizeHttpRequests((HttpRequests)->
                         HttpRequests
-                                .requestMatchers("/login", "/csrf").permitAll()//,"/h2-console/**").permitAll()
+                                .requestMatchers("/login", "/csrf", "/h2-console").permitAll()//,"/h2-console/**").permitAll()
                                 .anyRequest().authenticated()
                                 //.hasRole("USER")
                 )
+
                 .csrf((csrf) -> csrf
                         .csrfTokenRepository(httpSessionCsrfTokenRepository())
-                        //.ignoringRequestMatchers("/h2-console/**")
+                        .ignoringRequestMatchers("/h2-console/**")
                 )
-               // .headers(headers -> headers
-                 //       .frameOptions().sameOrigin())  // Allow frames from the same origin
+                .headers(headers -> headers
+                        .frameOptions().sameOrigin())  // Allow frames from the same origin
 
                 .formLogin(withDefaults());
         return http.build();

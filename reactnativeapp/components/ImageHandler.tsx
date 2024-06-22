@@ -18,7 +18,7 @@ export const getImage = async (choosePhoto : boolean)  => {
         {
 
         const hasPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (!hasPermission) 
+        if (!hasPermission.granted) 
             {
             alert("Permission to access camera library is necessary!");
             return null;
@@ -27,8 +27,8 @@ export const getImage = async (choosePhoto : boolean)  => {
         }
     else //else use the camera to take a picture
     {
-        const hasPermission = await ImagePicker.requestCameraPermissionsAsync;
-        if (!hasPermission)
+        const hasPermission = await ImagePicker.requestCameraPermissionsAsync();
+        if (!hasPermission.granted)
             {
             alert("Permission to access camera is necessary!");
             return null;
@@ -47,7 +47,7 @@ export const uploadImage = async (uri: string, serverURL : string, changeLoading
         changeLoadingState();
         try{
 
-            const res = await FileSystem.uploadAsync(serverURL + "imgupload/"
+            const res = await FileSystem.uploadAsync(serverURL + "/imgupload/"
             , uri, {
                 httpMethod: "POST",
             uploadType: FileSystem.FileSystemUploadType.MULTIPART,
@@ -55,12 +55,12 @@ export const uploadImage = async (uri: string, serverURL : string, changeLoading
             //Defaults to the file name without an extension.
                     });
         changeLoadingState();
-    return res.headers;
+    return Number(res.body);
     }
     catch (error){
         changeLoadingState();
         alert(error);
-        return null;
+        return -1;
     }
 
     }

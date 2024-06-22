@@ -27,11 +27,10 @@ public class CsrfController {
     //https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/web/csrf/HttpSessionCsrfTokenRepository.html#saveToken(org.springframework.security.web.csrf.CsrfToken,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)
     @GetMapping("/csrf")
     public CsrfToken getCsrfToken(HttpServletRequest request, HttpServletResponse response) {
-        //System.out.println(request.getSession());
+        System.out.println(request.toString() + "    Session " + request.getSession().getId());
         CsrfToken token = tokenRepository.loadToken(request);
         //a session is not associated with a token initially.
-        //it is send from the server in a form, and I want to use
-        //httpOnly with the mobile app
+        //it is sent from the server in a form or header
         if (token == null) {
             token = tokenRepository.generateToken(request);
             tokenRepository.saveToken(token, request, response);

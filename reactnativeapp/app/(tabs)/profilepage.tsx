@@ -8,7 +8,7 @@ export default function ProfilePage(){
         date: new Date().toLocaleString(), likes: 5
     }
     const testArray: TextPostProps[] = [
-        { ...textP },
+        { ...textP },   
         { ...textP, username: 'mario', likes: 10 },
         { ...textP, username: 'luigi', text: 'Luigi’s message!', date: new Date().toLocaleString(), likes: 15 , profileImageLink: 'https://pbs.twimg.com/profile_images/1265436085733093377/SCAoq66P_400x400.jpg'},
         { ...textP, username: 'peach', text: 'Peach’s message!', profileImageLink: "https://i.pinimg.com/736x/79/63/1a/79631a2cb68a1c202946c2f5044adabe.jpg" },

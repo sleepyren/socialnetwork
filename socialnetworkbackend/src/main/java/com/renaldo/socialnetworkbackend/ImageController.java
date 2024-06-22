@@ -3,10 +3,7 @@ package com.renaldo.socialnetworkbackend;
 import com.renaldo.socialnetworkbackend.models.Image;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
 
@@ -31,7 +28,7 @@ public class ImageController {
 
 
     @Transactional
-    @PostMapping(value = "/imgupload")
+    @PostMapping(value = "/imgupload/")
     public long uploadImage(MultipartFile file, HttpServletResponse response)  {
         Image image;
         try {
@@ -59,7 +56,7 @@ public class ImageController {
     }
 
     @PostMapping("/deleteimg")
-    public void deleteImage(long id, HttpServletResponse response) {
+    public void deleteImage(@RequestBody long id, HttpServletResponse response) {
         Image i = repository.findImageById(id);
         if (i == null) {
             response.setStatus(404);
