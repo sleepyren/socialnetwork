@@ -16,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.sql.DataSource;
 
@@ -32,10 +34,6 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Bean
-    protected HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository() {
-        return new HttpSessionCsrfTokenRepository();
-    }
 
     //Final Methods based on this reference:
     //https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html
@@ -45,19 +43,28 @@ public class SecurityConfiguration {
                 //lambda expression inside authorize http requests
                 .authorizeHttpRequests((HttpRequests)->
                         HttpRequests
-                                .requestMatchers("/login", "/csrf", "/h2-console").permitAll()//,"/h2-console/**").permitAll()
-                                .anyRequest().authenticated()
+                                        .requestMatchers("/login", "/h2-console", "/error", "/favicon.ico").permitAll()//,"/csrf",
+                                .anyRequest().permitAll()
+                        // "/h2-console/**").permitAll()
                                 //.hasRole("USER")
                 )
+                //see CsrfController for explanation
 
-                .csrf((csrf) -> csrf
-                        .csrfTokenRepository(httpSessionCsrfTokenRepository())
-                        .ignoringRequestMatchers("/h2-console/**")
-                )
                 .headers(headers -> headers
                         .frameOptions().sameOrigin())  // Allow frames from the same origin
 
-                .formLogin(withDefaults());
+                //.formLogin(withDefaults());
+
+
+
+                .formLogin(form -> form
+                .loginPage("/login")
+                       .loginProcessingUrl("/login")
+
+
+    )
+        //.addFilterBefore(new UserAgentFilter(), UsernamePasswordAuthenticationFilter.class);
+        .csrf().disable();
         return http.build();
     }
 

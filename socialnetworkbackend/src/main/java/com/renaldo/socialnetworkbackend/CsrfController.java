@@ -1,4 +1,6 @@
+/*
 package com.renaldo.socialnetworkbackend;
+
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,10 +15,10 @@ public class CsrfController {
 
     private final HttpSessionCsrfTokenRepository tokenRepository;
 
-    /*
+
     Why do I have this constructor? Because field injection like I learned it
     is not recommended anymore. This makes sure that object can
-    never be null since it instantiated with a real obj*/
+    never be null since it instantiated with a real obj
     @Autowired
     CsrfController(HttpSessionCsrfTokenRepository repo)
     {
@@ -25,7 +27,7 @@ public class CsrfController {
 
     //reference:
     //https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/web/csrf/HttpSessionCsrfTokenRepository.html#saveToken(org.springframework.security.web.csrf.CsrfToken,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)
-    @GetMapping("/csrf")
+    @Get/Mapping("/csrf")
     public CsrfToken getCsrfToken(HttpServletRequest request, HttpServletResponse response) {
         System.out.println(request.toString() + "    Session " + request.getSession().getId());
         CsrfToken token = tokenRepository.loadToken(request);
@@ -39,3 +41,4 @@ public class CsrfController {
         return token;
     }
 }
+*/

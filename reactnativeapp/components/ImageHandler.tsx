@@ -7,7 +7,7 @@ const OPTIONS : ImagePicker.ImagePickerOptions = {
     allowsMultipleSelection: false,
     mediaTypes: ImagePicker.MediaTypeOptions.Images
 }
-
+const MAX_SIZE = 7 * 1024 * 1024; // 7 MB is the limit on my spring server
 export type photoUriInfo = {uri: string, chosenPhoto: boolean};
 
 
@@ -23,7 +23,15 @@ export const getImage = async (choosePhoto : boolean)  => {
             alert("Permission to access camera library is necessary!");
             return null;
             }
-        result = await ImagePicker.launchImageLibraryAsync(OPTIONS);
+            let isImageValid = false;
+            result = await ImagePicker.launchImageLibraryAsync(OPTIONS);
+            /*
+            while (!isImageValid)
+                {
+                result = await ImagePicker.launchImageLibraryAsync(OPTIONS);
+                if (result.canceled) break;
+                let isImageValid = checkImageSize(result.assets[0].uri)
+                }*/
         }
     else //else use the camera to take a picture
     {
@@ -36,7 +44,7 @@ export const getImage = async (choosePhoto : boolean)  => {
             result = await ImagePicker.launchCameraAsync(OPTIONS);
     }
 
-    if (!result.canceled) return {uri: result.assets[0].uri, chosenPhoto: choosePhoto}
+    if (result && !result.canceled) return {uri: result.assets[0].uri, chosenPhoto: choosePhoto}
 
     return null;
 }
@@ -47,7 +55,7 @@ export const uploadImage = async (uri: string, serverURL : string, changeLoading
         changeLoadingState();
         try{
 
-            const res = await FileSystem.uploadAsync(serverURL + "/imgupload/"
+            const res = await FileSystem.uploadAsync(serverURL + "/imgupload"
             , uri, {
                 httpMethod: "POST",
             uploadType: FileSystem.FileSystemUploadType.MULTIPART,
@@ -55,6 +63,7 @@ export const uploadImage = async (uri: string, serverURL : string, changeLoading
             //Defaults to the file name without an extension.
                     });
         changeLoadingState();
+        console.log("img upload response body", res.body);
     return Number(res.body);
     }
     catch (error){
@@ -63,6 +72,18 @@ export const uploadImage = async (uri: string, serverURL : string, changeLoading
         return -1;
     }
 
+    }
+
+    async function checkImageSize(uri : string) : Promise<boolean> {
+        const fileInfo = await FileSystem.getInfoAsync(uri, {size: true});
+    
+        if (fileInfo.exists && fileInfo.size > MAX_SIZE) {
+            alert('The file size is too large. Please select a smaller file.');
+            return false;
+        } else {
+            console.log('Image is within the size limit. Proceed with upload or further processing.');
+            return true;
+        }
     }
 
 

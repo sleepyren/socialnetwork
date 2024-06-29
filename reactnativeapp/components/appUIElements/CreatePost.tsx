@@ -47,25 +47,30 @@ export function CreatePost(data: {username : string, profileImageLink: string})
     const toggleUploadState = () => {setIsUploading(state=>!state)};
     
     const login = async ()=>{
-        const res = await fetch(backendURL + "/csrf", {
-        method: "GET",
-        //headers: { "Cookie": await SecureStore.getItemAsync("session") as string}
-    });
-    const body = res.headers;
-    console.log();
-
-    const res2 = await fetch(backendURL + "/login", {
+        const payload = JSON.stringify({username: "renny", password: "Imhere"});
+        console.log(payload);
+        const encoded = new URLSearchParams();
+        encoded.append("username", "renny");
+        encoded.append("password", "Imhere")
+        const res2 = await fetch(backendURL + "/login", {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            "x-csrf-token": body.get("x-csrf-token") as string
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: JSON.stringify({username: "renny", password: "Imhere"}),
+        credentials: "include",
+        body: encoded.toString(),
     });
-    console.log(await SecureStore.getItemAsync("session"))
+        console.log(res2);
+
+        console.log('Login Result:', res2.headers.get("Set-Cookie"));
+        console.log(await fetch(backendURL +  "/printall", {
+            method: "GET",
+            credentials: "include"
+        }))
+    //console.log(await SecureStore.getItemAsync("session"))
     //SecureStore.setItemAsync("session", body.get("Set-Cookie") as string)
 
-    //console.log(res2.headers);
+    console.log(await res2.json());
     
     };
     useEffect(()=>{
@@ -76,16 +81,16 @@ export function CreatePost(data: {username : string, profileImageLink: string})
             {alert("Image Choice Failure"); return;}
 
         let response = null;
-        if (isImagePost) response = await uploadImage((uri?.uri as string), 
-            backendURL as string, toggleUploadState);
         let postObj : GenericPost = {username: data.username, profileImageLink: data.profileImageLink, text: text, 
             date: new Date().toISOString(), likes: 0}
-        const id = response as number;
+        
 
         if (isImagePost)
             {
-                if (id >= 0) //if success
+                const id = response = await uploadImage((uri?.uri as string), 
+        backendURL as string, toggleUploadState);
 
+                if (id >= 0) //if success
                     postObj.bodyImage = backendURL + "/img/" + id;
                 else //if failed reset state and cache
                 {
@@ -100,18 +105,22 @@ export function CreatePost(data: {username : string, profileImageLink: string})
             }
 
 
-            response = await fetch(backendURL + "/save/", {
+            response = await fetch(backendURL + "/save", {
                 method: "POST",
                 body: JSON.stringify(postObj),
+                headers : {
+                    "Content-Type" : "application/json"
+                }
+
             })
             //finally submit Post Obj altogether 
             //and also create an endpoint to delete 
             //if the image was uploaded but the post upload failed
 
-            
+            console.log(response);
             if (!response.ok && id >=0 )
             {
-                fetch(backendURL + /deleteimg/, {method: "POST",
+                fetch(backendURL + "/deleteimg", {method: "POST",
                     body: String(id)
                 });
             }
