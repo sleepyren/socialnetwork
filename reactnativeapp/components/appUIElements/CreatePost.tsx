@@ -84,10 +84,10 @@ export function CreatePost(data: {username : string, profileImageLink: string})
         let postObj : GenericPost = {username: data.username, profileImageLink: data.profileImageLink, text: text, 
             date: new Date().toISOString(), likes: 0}
         
-
+            let id = -1;
         if (isImagePost)
             {
-                const id = response = await uploadImage((uri?.uri as string), 
+                id = await uploadImage((uri?.uri as string), 
         backendURL as string, toggleUploadState);
 
                 if (id >= 0) //if success

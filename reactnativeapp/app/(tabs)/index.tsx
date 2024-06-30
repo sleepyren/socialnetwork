@@ -3,10 +3,15 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { TextPost, TextPostProps } from '@/components/appUIElements/TextPost';
+import { CreatePost } from '@/components/appUIElements/CreatePost';
 
-
-export default function HomeScreen() {
-
+export default function TestScreen() {
+const textP : TextPostProps = {username: 'ren', text: 'This is \
+the body of the message! TEST TEST !',
+    profileImageLink: "https://upload.wikimedia.org/wikipedia/en/a/a9/MarioNSMBUDeluxe.png",
+    date: JSON.stringify(new Date()), likes: 5
+} //.toLocaleString()
 return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -16,37 +21,15 @@ return (
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+      <TextPost {...textP}></TextPost>
+      <TextPost {...textP}></TextPost>
+      <TextPost {...textP}></TextPost>
+      <TextPost {...textP}></TextPost>
+      <TextPost {...textP}></TextPost>
+      <TextPost {...textP}></TextPost>
+      <TextPost {...textP}></TextPost>
+      <TextPost {...textP}></TextPost>
+      <CreatePost username='renny' profileImageLink='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlz28jP2IzULAruLKUf-NDVB_vV5QMlreGmA&s'/>
     </ParallaxScrollView>
   );
 }
@@ -69,3 +52,4 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
+
