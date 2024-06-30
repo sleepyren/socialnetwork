@@ -12,5 +12,6 @@ public interface ImageRepo extends JpaRepository<Image, Long> {
 
     List<Image> findByName(String name);
 
+    Image findImagesByProfileImageOf(String profileImage);
 
 }

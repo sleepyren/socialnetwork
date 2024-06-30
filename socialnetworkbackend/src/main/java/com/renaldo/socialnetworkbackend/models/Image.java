@@ -1,10 +1,7 @@
 package com.renaldo.socialnetworkbackend.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 
 @Entity
 public class Image {
@@ -13,6 +10,10 @@ public class Image {
     @GeneratedValue
     private Long id;
     private String name;
+
+    @Column(nullable = true)
+    private String profileImageOf;
+
 
     @Lob //Stands for Large Object
     private byte[] data;
@@ -45,5 +46,13 @@ public class Image {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    public String getProfileImageOf() {
+        return profileImageOf;
+    }
+
+    public void setProfileImageOf(String profileImageOf) {
+        this.profileImageOf = profileImageOf;
     }
 }
