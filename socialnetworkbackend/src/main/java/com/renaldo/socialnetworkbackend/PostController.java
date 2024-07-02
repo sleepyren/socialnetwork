@@ -1,48 +1,63 @@
 package com.renaldo.socialnetworkbackend;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import com.renaldo.socialnetworkbackend.PostRepo;
 import com.renaldo.socialnetworkbackend.models.Post;
+import com.renaldo.socialnetworkbackend.models.PostWithImageId;
 
-import javax.print.attribute.standard.Media;
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class PostController {
 
-    private final PostRepo repository;
+
+    private final PostRepo PostRepository;
+    private final ImageRepo ImageRepository;
     /*
     Why do I have this constructor? Because field injection like I learned it
     is not recommended anymore. This makes sure that object can
     never be null since it instantiated with a real obj*/
     @Autowired
-    public PostController(PostRepo repository) {
-        this.repository = repository;
+    public PostController(PostRepo PostRepo, ImageRepo ImageRepo) {
+        this.PostRepository = PostRepo;
+        this.ImageRepository = ImageRepo;
     }
 
 
-    @GetMapping(value = "/printall")
-    public List<Post> printAll()
+    @GetMapping(value = "/allposts")
+    public List<PostWithImageId> printAll()
     {
-        return repository.findAll();
-        //return post;
+        List<Post> PostList =  PostRepository.findAll();
+        List<PostWithImageId> postWithImageIdList = new ArrayList<>();
+        for (Post post : PostList) {
+            long userProfileImageId = ImageRepository.findImageIdByProfileImageOf(post.getUsername());
+            postWithImageIdList.add(new PostWithImageId(post, userProfileImageId));
+        }
+        return postWithImageIdList;
     }
     @PostMapping(value = "/save", consumes = "application/json")
     public Post save(@RequestBody Post post)
-    {return repository.save(post);}
+    {return PostRepository.save(post);}
     
 
     @GetMapping(value = "/postbyid/{id}")
-    public Post findById(@PathVariable Long id)
-    {return repository.findById(id).orElseThrow(IllegalArgumentException::new);}
+    public PostWithImageId findById(@PathVariable Long id)
+    {
+        Post post = PostRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return new PostWithImageId(post, id);
+    }
 
     @GetMapping(value="/postsbyusername/{username}")
-    public List<Post> findByUsername(@PathVariable String username)
-    {return repository.findByUsername(username);}
+    public List<PostWithImageId> findByUsername(@PathVariable String username)
+    { List<Post> posts = PostRepository.findByUsername(username);
+        List<PostWithImageId> postWithImageIdList = new ArrayList<>();
 
+        for (Post post : posts) {
+            long userProfileImageId = ImageRepository.findImageIdByProfileImageOf(post.getUsername());
+            postWithImageIdList.add(new PostWithImageId(post, userProfileImageId));
+    }
+        return postWithImageIdList;
 }
+
+    }

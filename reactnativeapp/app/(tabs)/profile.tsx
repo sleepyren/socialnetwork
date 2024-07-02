@@ -1,5 +1,8 @@
 import { ProfilePageFormat, ProfilePageProps } from "@/components/appUIElements/ProfilePageFormat";
 import { TextPostProps, TextPost} from "@/components/appUIElements/TextPost";
+import { View } from "react-native";
+import { CreatePost } from "@/components/appUIElements/CreatePost";
+
 
 export default function ProfilePage(){
     const textP : TextPostProps = {username: 'ren', text: 'This is \
@@ -22,6 +25,12 @@ const props : ProfilePageProps = {username: 'Renaldo',
  profilepiclink: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxPOPGqxj4OiU0H_ikuhByPQgYcQHCJLXSQQ&s',
 bio: 'Here is my bio. I am an interesting persoN! Here is my bio. I am an interesting persoN!', array: testArray}
 
-return (<ProfilePageFormat {...props} />)
+return (
+<View>
+<ProfilePageFormat {...props} />
+<CreatePost username="renny" profileImageLink="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxPOPGqxj4OiU0H_ikuhByPQgYcQHCJLXSQQ&s"/>
+</View>
+
+)
 
 }

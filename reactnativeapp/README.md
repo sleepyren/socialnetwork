@@ -2,6 +2,14 @@
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+
+
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO testuser;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO testuser;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO testuser;
+
+
 ## Get started
 
 1. Install dependencies

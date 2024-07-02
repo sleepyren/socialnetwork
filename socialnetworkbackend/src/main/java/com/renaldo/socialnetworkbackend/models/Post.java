@@ -11,7 +11,11 @@ public class Post {
     private String text;
     private String date;
     private int likes;
-    private String profileImageLink;
+
+    @Id @GeneratedValue
+    private int id;
+    private String bodyImage;
+
 
     public int getId() {
         return id;
@@ -29,24 +33,19 @@ public class Post {
         this.bodyImage = bodyImage;
     }
 
-    @Id @GeneratedValue
-    private int id;
-    private String bodyImage;
 
     //for creating text posts; they will not have a body image
-    public Post(String username, String text, String date, int likes, String profileImageLink) {
+    public Post(String username, String text, String date, int likes) {
         this.username = username;
         this.text = text;
         this.date = date;
         this.likes = likes;
-        this.profileImageLink = profileImageLink;
     }
     // for creating image posts without text in body
-    public Post(String username, String date, int likes, String profileImageLink, String bodyImage) {
+    public Post(String username, String date, int likes, String bodyImage) {
         this.username = username;
         this.date = date;
         this.likes = likes;
-        this.profileImageLink = profileImageLink;
         this.bodyImage = bodyImage;
     }
 
@@ -56,7 +55,6 @@ public class Post {
         this.text = text;
         this.date = date;
         this.likes = likes;
-        this.profileImageLink = profileImageLink;
         this.bodyImage = bodyImage;
     }
 
@@ -76,14 +74,6 @@ public class Post {
 
     public void setLikes(int likes) {
         this.likes = likes;
-    }
-
-    public String getProfileImageLink() {
-        return profileImageLink;
-    }
-
-    public void setProfileImageLink(String profileImageLink) {
-        this.profileImageLink = profileImageLink;
     }
 
     public String getUsername() {
@@ -109,7 +99,6 @@ public class Post {
                 ", text='" + text + '\'' +
                 ", date='" + date + '\'' +
                 ", likes=" + likes +
-                ", profileImageLink='" + profileImageLink + '\'' +
                 ", id=" + id +
                 ", bodyImage='" + bodyImage + '\'' +
                 '}';

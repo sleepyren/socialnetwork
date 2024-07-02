@@ -60,7 +60,6 @@ export const uploadImage = async (uri: string, serverURL : string, changeLoading
                 httpMethod: "POST",
             uploadType: FileSystem.FileSystemUploadType.MULTIPART,
             fieldName: "file" //The name of the field which will hold uploaded file. 
-            //Defaults to the file name without an extension.
                     });
         changeLoadingState();
         console.log("img upload response body", res.body);

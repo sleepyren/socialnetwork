@@ -2,6 +2,7 @@ package com.renaldo.socialnetworkbackend.models;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Image {

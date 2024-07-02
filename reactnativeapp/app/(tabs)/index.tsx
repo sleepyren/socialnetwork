@@ -5,6 +5,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { TextPost, TextPostProps } from '@/components/appUIElements/TextPost';
 import { CreatePost } from '@/components/appUIElements/CreatePost';
+import { useEffect } from 'react';
+import { getUserDetails, login } from '@/components/networking';
 
 export default function TestScreen() {
 const textP : TextPostProps = {username: 'ren', text: 'This is \
@@ -29,7 +31,6 @@ return (
       <TextPost {...textP}></TextPost>
       <TextPost {...textP}></TextPost>
       <TextPost {...textP}></TextPost>
-      <CreatePost username='renny' profileImageLink='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlz28jP2IzULAruLKUf-NDVB_vV5QMlreGmA&s'/>
     </ParallaxScrollView>
   );
 }

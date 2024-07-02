@@ -75,7 +75,7 @@ public class ImageController {
         Image image;
         try {
             //getBytes throws IOException
-            image = new Image(file.getName(), resizeImage(file));
+            image = new Image(file.getOriginalFilename(), resizeImage(file));
             image = repository.save(image);
         } catch (IOException e) {
             sendIOError(response);
