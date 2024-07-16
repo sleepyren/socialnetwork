@@ -17,3 +17,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS profile_img_username ON image (profile_image_o
     IS NOT NULL;
 
 CREATE INDEX IF NOT EXISTS posts_of_user ON post (username);
+
+-- Allow NULL values so that I can add text only posts with no body image
+ALTER TABLE post ALTER COLUMN body_image_id DROP NOT NULL;

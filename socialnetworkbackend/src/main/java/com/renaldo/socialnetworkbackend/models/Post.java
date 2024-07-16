@@ -14,66 +14,17 @@ public class Post {
 
     @Id @GeneratedValue
     private int id;
-    private String bodyImage;
 
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getBodyImage() {
-        return bodyImage;
-    }
-
-    public void setBodyImage(String bodyImage) {
-        this.bodyImage = bodyImage;
-    }
+    private Integer bodyImageId;
 
 
-    //for creating text posts; they will not have a body image
-    public Post(String username, String text, String date, int likes) {
-        this.username = username;
-        this.text = text;
-        this.date = date;
-        this.likes = likes;
-    }
-    // for creating image posts without text in body
-    public Post(String username, String date, int likes, String bodyImage) {
-        this.username = username;
-        this.date = date;
-        this.likes = likes;
-        this.bodyImage = bodyImage;
-    }
 
-    //for creating image posts with text in body
-    public Post(String username, String text, String date, int likes, String profileImageLink, String bodyImage) {
-        this.username = username;
-        this.text = text;
-        this.date = date;
-        this.likes = likes;
-        this.bodyImage = bodyImage;
-    }
 
     public Post() {}
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
+    public Integer getBodyImageId(){
+        return bodyImageId;
     }
 
     public String getUsername() {
@@ -92,6 +43,18 @@ public class Post {
         this.text = text;
     }
 
+    public int getLikes() {
+        return likes;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -100,7 +63,7 @@ public class Post {
                 ", date='" + date + '\'' +
                 ", likes=" + likes +
                 ", id=" + id +
-                ", bodyImage='" + bodyImage + '\'' +
+                ", bodyImage='" + bodyImageId + '\'' +
                 '}';
     }
 }
