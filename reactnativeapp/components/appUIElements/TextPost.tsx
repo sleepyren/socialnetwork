@@ -3,12 +3,12 @@ import { ThemedText, ThemedTextProps } from "../ThemedText";
 import { Image, StyleSheet, View} from "react-native";
 
 
-export type TextPostProps = {username: string, text: string, date: string, likes: Number,
-    profileImageLink: string
+export type TextPostProps = {username: string, text: string, date: string, likes: number,
+    profileImageId: number, id?: number
 };
 
 
-export function TextPost(props: TextPostProps)
+export function TextPost(props: TextPostProps & ({imgLink : (ele : number)=>string}))
 {
     
     const usernameprops : ThemedTextProps = {type : 'title'} 
@@ -20,7 +20,7 @@ return (
     <ThemedView  style = {styles.container}>
     <View style= {styles.headerview}>
     <ThemedText {...usernameprops} style= {styles.username}>{props.username }</ThemedText>
-    <Image source={{uri: props.profileImageLink}} style = {styles.profileImage}></Image>
+    <Image source={{uri: props.imgLink(props.profileImageId) }} style = {styles.profileImage}/>
     </View>
     <ThemedText {...bodyprops} style = {styles.body}>
     {props.text}
@@ -49,11 +49,12 @@ const styles = StyleSheet.create({
     },
 
     headerview: {
-        flex: 1,
+        flex: .5,
         height: 40,
         width: 350,
         position: 'relative',
-        padding: '5%',
+    paddingBottom: '2%',
+    paddingTop: '2%'
 
     },
 
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
 
     footerview: {
         position: 'relative',
-        flex: 1
+        flex: .5
     },
 
     likes: {

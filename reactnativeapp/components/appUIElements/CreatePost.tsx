@@ -9,9 +9,8 @@ import * as SecureStore from 'expo-secure-store';
 
 const backendURL = process.env.EXPO_PUBLIC_BACKEND as string;
 
-export type GenericPost = {username: string, profileImageLink: string, text: string, date: string, 
-    bodyImage?:string, likes: Number
-};
+export type GenericPostProps = {username: string, profileImageId?: number, text?: string, date: string, 
+    bodyImageId?: number, id?: number, likes?: number, imgLink?: (ele : number)=>string } ;
 
 function GrabPhotoForPost(setUri : Function, render: boolean){
 const [clicked, setClicked] = useState(false);
@@ -33,7 +32,7 @@ return (
 
 }
 
-export function CreatePost(data: {username : string, profileImageLink: string})
+export function CreatePost(data: {username : string, profileImageId: number})
 {
     const [isImagePost, setPostType] = useState(true);
     const [text, setText] = useState("");
@@ -52,9 +51,11 @@ export function CreatePost(data: {username : string, profileImageLink: string})
         if (isImagePost && uri == null)
             {alert("Image Choice Failure"); return;}
 
+
+        //fix
         let response = null;
-        let postObj : GenericPost = {username: data.username, profileImageLink: data.profileImageLink, text: text, 
-            date: new Date().toISOString(), likes: 0}
+        let postObj : GenericPostProps = {username: data.username, profileImageId: data.profileImageId, text: text, 
+            date: new Date().toISOString()}
         
             let id = -1;
         if (isImagePost)
@@ -63,7 +64,7 @@ export function CreatePost(data: {username : string, profileImageLink: string})
         backendURL as string, toggleUploadState);
 
                 if (id >= 0) //if success
-                    postObj.bodyImage = backendURL + "/img/" + id;
+                    postObj.bodyImageId = id;
                 else //if failed reset state and cache
                 {
                     //if this was a photo not selected from the file system

@@ -1,19 +1,31 @@
 import { Image, StyleSheet, Platform } from 'react-native';
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { TextPost, TextPostProps } from '@/components/appUIElements/TextPost';
-import { CreatePost } from '@/components/appUIElements/CreatePost';
 import { useEffect } from 'react';
-import { getUserDetails, login } from '@/components/networking';
+import { getAllPosts } from '@/components/networking';
+import { postPropsToNativeComponent } from '@/components/renderTool';
+import { useState } from 'react';
+import { GenericPostProps } from '@/components/appUIElements/CreatePost';
+import { isImagePost, isTextPost } from '@/components/renderTool';
+import { idToProfileImageURL } from '@/components/networking';
+
 
 export default function TestScreen() {
-const textP : TextPostProps = {username: 'ren', text: 'This is \
-the body of the message! TEST TEST !',
-    profileImageLink: "https://upload.wikimedia.org/wikipedia/en/a/a9/MarioNSMBUDeluxe.png",
-    date: JSON.stringify(new Date()), likes: 5
-} //.toLocaleString()
+
+  
+const [allPosts, setAllPosts] = useState<
+(GenericPostProps | null)[]>([]);
+
+useEffect(()=>{
+  
+  (async ()=>{
+  const postProps = await getAllPosts(isTextPost, isImagePost);
+  //console.log(posts);
+  setAllPosts(postProps); })() 
+
+}
+,[]);
+
 return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -23,14 +35,8 @@ return (
           style={styles.reactLogo}
         />
       }>
-      <TextPost {...textP}></TextPost>
-      <TextPost {...textP}></TextPost>
-      <TextPost {...textP}></TextPost>
-      <TextPost {...textP}></TextPost>
-      <TextPost {...textP}></TextPost>
-      <TextPost {...textP}></TextPost>
-      <TextPost {...textP}></TextPost>
-      <TextPost {...textP}></TextPost>
+        {allPosts.map((ele)=>postPropsToNativeComponent(ele, idToProfileImageURL))}
+
     </ParallaxScrollView>
   );
 }

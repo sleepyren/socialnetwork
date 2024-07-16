@@ -8,7 +8,7 @@ import { TextPostProps, TextPost} from "./TextPost"
 export type ProfilePageProps = {
     profilepiclink: string,
     username: string,
-    bio: string,
+    bio?: string,
     array: Array<TextPostProps>
 }
 

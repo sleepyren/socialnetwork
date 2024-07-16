@@ -1,5 +1,6 @@
-import { GenericPost } from "./appUIElements/CreatePost";
-const backendURL = process.env.EXPO_PUBLIC_BACKEND as string;
+import { GenericPostProps } from "./appUIElements/CreatePost";
+export const backendURL = process.env.EXPO_PUBLIC_BACKEND as string;
+
 
 export async function login(username: string, password: string) : Promise<Response>
 {
@@ -17,7 +18,7 @@ export async function login(username: string, password: string) : Promise<Respon
 });
 }
 
-export async function savePost(post: GenericPost)
+export async function savePost(post: GenericPostProps)
 {
     return fetch(backendURL + "/save", {
         method: "POST",
@@ -43,4 +44,38 @@ export async function deleteImageFromDatabase(id : number)
     return fetch(backendURL + "/deleteimg", {method: "POST",
         body: String(id)});
 
+}
+
+export async function getAllPosts(isTextPost : (obj : GenericPostProps)=> boolean,
+isImagePost: (obj: GenericPostProps)=> boolean)
+{
+    const response = await fetch(backendURL + "/allposts", {
+        method: "GET",
+        credentials: "include",
+    })
+
+console.log(response);
+
+    const json : {profileImageId: number, post: Object}[]  = await response.json();
+    //backend returns {post: "postdetails", profileImageId: number}
+    //mutate so that profileImageId is within same obj for frontend
+    console.log("json");
+    console.log(json);
+    const mutatedJSON = json.map((ele) : GenericPostProps | null => {
+        
+        const mutatedPost = {...ele.post, profileImageId : ele.profileImageId} as GenericPostProps;
+        if (!( isImagePost(mutatedPost) || isTextPost(mutatedPost)) ) return null;
+
+        return mutatedPost}
+     );
+
+    //console.log(json);
+    return mutatedJSON;
+    
+}
+
+
+export function idToProfileImageURL(id : number) : string 
+{
+return backendURL + "/img/" + id;
 }
